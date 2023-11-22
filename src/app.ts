@@ -5,7 +5,7 @@ const app = express();
 const PORT = 8080;
 
 app.get("/", (_req: Request, res: Response) => {
-  return res.json({
+  return res.send({
     message: "test",
   });
 });

@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const PORT = 8080;
 app.get("/", (_req, res) => {
-    return res.json({
+    return res.send({
         message: "test",
     });
 });
