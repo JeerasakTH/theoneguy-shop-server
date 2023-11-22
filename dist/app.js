@@ -11,4 +11,9 @@ app.get("/", (_req, res) => {
         message: "test",
     });
 });
+app.get("/test", (_req, res) => {
+    return res.status(200).json({
+        message: "test",
+    });
+});
 app.listen(PORT, () => console.log(`pass`));
