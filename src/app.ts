@@ -2,8 +2,6 @@ import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
 import { DB, PORT } from "./constants";
-import { errorHandler } from "./utils/errorHandler";
-import AppError from "./utils/appError";
 import itemRoutes from "./routes/itemRoute";
 
 const app = express();
@@ -28,10 +26,11 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.use("/api/items", itemRoutes);
-app.use(errorHandler);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+  return res.status(500).json({
+    message: "fail",
+  });
 });
 
 app.listen(PORT, () => {

@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const constants_1 = require("./constants");
-const errorHandler_1 = require("./utils/errorHandler");
-const appError_1 = __importDefault(require("./utils/appError"));
 const itemRoute_1 = __importDefault(require("./routes/itemRoute"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
@@ -37,9 +35,10 @@ app.get("/", (_req, res) => {
     });
 });
 app.use("/api/items", itemRoute_1.default);
-app.use(errorHandler_1.errorHandler);
 app.all("*", (req, res, next) => {
-    next(new appError_1.default(`Can't find ${req.originalUrl} on this server!`, 404));
+    return res.status(500).json({
+        message: "fail",
+    });
 });
 app.listen(constants_1.PORT, () => {
     connect();
