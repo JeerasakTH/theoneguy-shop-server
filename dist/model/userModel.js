@@ -23,10 +23,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Fakebook = void 0;
+exports.Users = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const fakebookSchema = new mongoose_1.Schema({
+const userSchema = new mongoose_1.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
+    address: { type: String, required: true },
 });
-exports.Fakebook = mongoose_1.default.model("Fakebook", fakebookSchema, "fakebook");
+exports.Users = mongoose_1.default.model("User", userSchema, "user_statement");

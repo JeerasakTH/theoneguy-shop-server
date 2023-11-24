@@ -16,8 +16,12 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const constants_1 = require("./constants");
 const itemRoute_1 = __importDefault(require("./routes/itemRoute"));
+const errorHandler_1 = require("./utils/errorHandler");
+const appError_1 = __importDefault(require("./utils/appError"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
+app.use((0, cors_1.default)({ credentials: true, origin: "http://localhost:5173" }));
 const connect = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         mongoose_1.default.set("strictQuery", false);
@@ -36,10 +40,9 @@ app.get("/", (_req, res) => {
 });
 app.use("/api/items", itemRoute_1.default);
 app.all("*", (req, res, next) => {
-    return res.status(500).json({
-        message: "fail",
-    });
+    next(new appError_1.default(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+app.use(errorHandler_1.errorHandler);
 app.listen(constants_1.PORT, () => {
     connect();
     console.log(`Listening on ${constants_1.PORT}`);

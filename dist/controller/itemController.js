@@ -8,19 +8,54 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllItem = void 0;
-const fakebook_1 = require("../model/fakebook");
+exports.createItem = exports.getAllItem = exports.getOneItem = void 0;
+const itemModel_1 = require("../model/itemModel");
+const repo_1 = require("../utils/repo");
+const appError_1 = __importDefault(require("../utils/appError"));
+const resJson_1 = require("../utils/resJson");
+const getOneItem = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const filter = { _id: id };
+        const sort = {};
+        const items = yield (0, repo_1.getOne)(itemModel_1.Items, filter, null, sort);
+        if (!items) {
+            return next(new appError_1.default("Not found Item", 404));
+        }
+        return (0, resJson_1.resJson)(res, "Get item successfully", items, 200);
+    }
+    catch (error) {
+        next(new appError_1.default(`${error}`, 500));
+    }
+});
+exports.getOneItem = getOneItem;
 const getAllItem = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const test = yield fakebook_1.Fakebook.find();
-        res.status(200).send({
-            message: "success",
-            data: test,
-        });
+        const filter = {};
+        const sort = {};
+        const items = yield (0, repo_1.getMany)(itemModel_1.Items, filter, null, sort);
+        if (items.length === 0) {
+            return next(new appError_1.default("Not found Item", 404));
+        }
+        return (0, resJson_1.resJson)(res, "Get all item successfully", items, 200);
     }
-    catch (err) {
-        console.log(err);
+    catch (error) {
+        next(new appError_1.default(`${error}`, 500));
     }
 });
 exports.getAllItem = getAllItem;
+const createItem = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const obj = req.body;
+        const item = yield (0, repo_1.createOne)(itemModel_1.Items, obj);
+        return (0, resJson_1.resJson)(res, "Create item successfully", item, 201);
+    }
+    catch (error) {
+        next(new appError_1.default(`${error}`, 500));
+    }
+});
+exports.createItem = createItem;
