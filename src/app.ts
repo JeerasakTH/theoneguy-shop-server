@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 
 import { DB, PORT } from "./constants";
 import itemRoutes from "./routes/itemRoute";
+import userRoutes from "./routes/userRoute";
 import { errorHandler } from "./utils/errorHandler";
-import AppError from "./utils/appError";
 import cors from "cors";
+import { resJson } from "./utils/resJson";
 
 const app = express();
 app.use(express.json());
@@ -30,9 +31,15 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 app.use("/api/items", itemRoutes);
+app.use("/api/users", userRoutes);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+  return resJson(
+    res,
+    `Can't find ${req.originalUrl} on this server!`,
+    null,
+    404
+  );
 });
 
 app.use(errorHandler);

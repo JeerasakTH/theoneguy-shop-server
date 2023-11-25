@@ -8,7 +8,7 @@ export interface Item {
 }
 
 const itemSchema = new Schema<Item>({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   type: { type: String, required: true },
   price: { type: Number, required: true },
   image: { type: String, required: true },
