@@ -27,9 +27,15 @@ export const login: RequestHandler = async (req, res, next) => {
     const sort = {};
     const user = await getOne(Users, filter, null, sort);
 
+    if (!user) {
+      // If no user is found with the provided username
+      return resJson(res, "Incorrect username", null, 401);
+    }
+
     const correctPassword = user.password === password;
-    if (!user || !correctPassword) {
-      resJson(res, "Incorrect username or password", null, 401);
+    if (!correctPassword) {
+      // If the password is incorrect
+      return resJson(res, "Incorrect password", null, 401);
     }
 
     const secret = process.env.JWT_SECRET || "secret";

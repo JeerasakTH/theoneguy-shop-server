@@ -22,7 +22,7 @@ const cors_1 = __importDefault(require("cors"));
 const resJson_1 = require("./utils/resJson");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({ credentials: true, origin: "http://localhost:5173" }));
+app.use((0, cors_1.default)({ credentials: true, origin: true }));
 const connect = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         mongoose_1.default.set("strictQuery", false);

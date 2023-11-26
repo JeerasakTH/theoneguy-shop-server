@@ -37,9 +37,14 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         const filter = { username };
         const sort = {};
         const user = yield (0, repo_1.getOne)(userModel_1.Users, filter, null, sort);
+        if (!user) {
+            // If no user is found with the provided username
+            return (0, resJson_1.resJson)(res, "Incorrect username", null, 401);
+        }
         const correctPassword = user.password === password;
-        if (!user || !correctPassword) {
-            (0, resJson_1.resJson)(res, "Incorrect username or password", null, 401);
+        if (!correctPassword) {
+            // If the password is incorrect
+            return (0, resJson_1.resJson)(res, "Incorrect password", null, 401);
         }
         const secret = process.env.JWT_SECRET || "secret";
         const token = jsonwebtoken_1.default.sign({ userId: user.id }, secret, {
