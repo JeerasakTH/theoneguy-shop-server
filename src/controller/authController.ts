@@ -33,8 +33,8 @@ export const login: RequestHandler = async (req, res, next) => {
     }
 
     const secret = process.env.JWT_SECRET || "secret";
-    const token = jwt.sign(user.id, secret, {
-      expiresIn: process.env.JWT_EXPIRES_IN,
+    const token = jwt.sign({ userId: user.id }, secret, {
+      expiresIn: process.env.JWT_EXPIRES_IN || "30d",
     });
 
     const expireDay = 30;
@@ -45,6 +45,46 @@ export const login: RequestHandler = async (req, res, next) => {
     });
 
     return resJson(res, "Login success", user, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const protect: RequestHandler = async (req, res, next) => {
+  try {
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    } else if (req.cookies.jwt) {
+      token = req.cookies.jwt;
+    }
+
+    if (!token) {
+      return resJson(
+        res,
+        "You are not logged in! Please log in to get access.",
+        null,
+        401
+      );
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret") as {
+      userId: string;
+    };
+
+    const filter = { _id: decoded.userId };
+    const sort = {};
+    const currentUser = await getOne(Users, filter, null, sort);
+
+    if (!currentUser) {
+      return resJson(res, "Token does no longer exist", null, 401);
+    }
+
+    res.locals.user = currentUser;
+    next();
   } catch (error) {
     next(error);
   }

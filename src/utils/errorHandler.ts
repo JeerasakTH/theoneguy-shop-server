@@ -3,6 +3,8 @@ import { resJson } from "./resJson";
 import { error } from "console";
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.log(err);
+
   // Params wrong
   if (err.name === "CastError") {
     const message = `Invalid ${err.path}: ${err.value}`;

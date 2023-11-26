@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.signup = void 0;
+exports.protect = exports.login = exports.signup = void 0;
 const userModel_1 = require("../model/userModel");
 const repo_1 = require("../utils/repo");
 const resJson_1 = require("../utils/resJson");
@@ -42,8 +42,8 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
             (0, resJson_1.resJson)(res, "Incorrect username or password", null, 401);
         }
         const secret = process.env.JWT_SECRET || "secret";
-        const token = jsonwebtoken_1.default.sign(user.id, secret, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
+        const token = jsonwebtoken_1.default.sign({ userId: user.id }, secret, {
+            expiresIn: process.env.JWT_EXPIRES_IN || "30d",
         });
         const expireDay = 30;
         res.cookie("jwt", token, {
@@ -58,3 +58,31 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
+const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let token;
+        if (req.headers.authorization &&
+            req.headers.authorization.startsWith("Bearer")) {
+            token = req.headers.authorization.split(" ")[1];
+        }
+        else if (req.cookies.jwt) {
+            token = req.cookies.jwt;
+        }
+        if (!token) {
+            return (0, resJson_1.resJson)(res, "You are not logged in! Please log in to get access.", null, 401);
+        }
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET || "secret");
+        const filter = { _id: decoded.userId };
+        const sort = {};
+        const currentUser = yield (0, repo_1.getOne)(userModel_1.Users, filter, null, sort);
+        if (!currentUser) {
+            return (0, resJson_1.resJson)(res, "Token does no longer exist", null, 401);
+        }
+        res.locals.user = currentUser;
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.protect = protect;

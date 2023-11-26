@@ -15,10 +15,11 @@ const repo_1 = require("../utils/repo");
 const resJson_1 = require("../utils/resJson");
 const getOneUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params;
-        const filter = { id };
-        const sort = {};
-        const user = yield (0, repo_1.getOne)(userModel_1.Users, filter, null, sort);
+        // const { id } = req.params;
+        // const filter = { id };
+        // const sort = {};
+        // const user = await getOne(Users, filter, null, sort);
+        const user = res.locals.user;
         if (!user) {
             return (0, resJson_1.resJson)(res, "Not found User", null, 404);
         }

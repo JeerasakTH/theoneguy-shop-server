@@ -5,10 +5,11 @@ import { resJson } from "../utils/resJson";
 
 export const getOneUser: RequestHandler = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const filter = { id };
-    const sort = {};
-    const user = await getOne(Users, filter, null, sort);
+    // const { id } = req.params;
+    // const filter = { id };
+    // const sort = {};
+    // const user = await getOne(Users, filter, null, sort);
+    const user = res.locals.user;
 
     if (!user) {
       return resJson(res, "Not found User", null, 404);

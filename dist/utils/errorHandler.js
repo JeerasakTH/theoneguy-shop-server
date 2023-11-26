@@ -4,6 +4,7 @@ exports.errorHandler = void 0;
 const resJson_1 = require("./resJson");
 const console_1 = require("console");
 const errorHandler = (err, req, res, next) => {
+    console.log(err);
     // Params wrong
     if (err.name === "CastError") {
         const message = `Invalid ${err.path}: ${err.value}`;
