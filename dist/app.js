@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const constants_1 = require("./constants");
 const itemRoute_1 = __importDefault(require("./routes/itemRoute"));
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
@@ -23,6 +24,7 @@ const resJson_1 = require("./utils/resJson");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({ credentials: true, origin: true }));
+app.use((0, cookie_parser_1.default)());
 const connect = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         mongoose_1.default.set("strictQuery", false);

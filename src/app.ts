@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 
 import { DB, PORT } from "./constants";
 import itemRoutes from "./routes/itemRoute";
@@ -11,6 +12,7 @@ import { resJson } from "./utils/resJson";
 const app = express();
 app.use(express.json());
 app.use(cors({ credentials: true, origin: true }));
+app.use(cookieParser());
 
 const connect = async () => {
   try {
