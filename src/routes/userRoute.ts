@@ -4,12 +4,13 @@ import {
   getAllUser,
   getOneUser,
 } from "../controller/userController";
-import { login, protect, signup } from "../controller/authController";
+import { login, logout, protect, signup } from "../controller/authController";
 
 const router = Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
+router.get("/logout", logout);
 
 router.route("/").get(protect, getOneUser);
 router.route("/allUsers").get(getAllUser);

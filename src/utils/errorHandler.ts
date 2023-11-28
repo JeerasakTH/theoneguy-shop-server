@@ -32,10 +32,17 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
 
   // token wrong
   if (error.name === "JsonWebTokenError") {
+    return resJson(res, "Invalid token. Please log in again!", null, 401);
   }
 
   // token has expired
   if (error.name === "TokenExpiredError") {
+    return resJson(
+      res,
+      "Your token has expired! Please log in again",
+      null,
+      401
+    );
   }
 
   return resJson(res, "Something went wrong", null, 500);

@@ -26,9 +26,11 @@ const errorHandler = (err, req, res, next) => {
     }
     // token wrong
     if (console_1.error.name === "JsonWebTokenError") {
+        return (0, resJson_1.resJson)(res, "Invalid token. Please log in again!", null, 401);
     }
     // token has expired
     if (console_1.error.name === "TokenExpiredError") {
+        return (0, resJson_1.resJson)(res, "Your token has expired! Please log in again", null, 401);
     }
     return (0, resJson_1.resJson)(res, "Something went wrong", null, 500);
 };

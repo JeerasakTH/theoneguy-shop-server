@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.protect = exports.login = exports.signup = void 0;
+exports.protect = exports.logout = exports.login = exports.signup = void 0;
 const userModel_1 = require("../model/userModel");
 const repo_1 = require("../utils/repo");
 const resJson_1 = require("../utils/resJson");
@@ -63,6 +63,14 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.login = login;
+const logout = (req, res, next) => {
+    res.cookie("jwt", "loggedOut", {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true,
+    });
+    (0, resJson_1.resJson)(res, "Logout success", null, 200);
+};
+exports.logout = logout;
 const protect = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let token;

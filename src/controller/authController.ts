@@ -56,6 +56,14 @@ export const login: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const logout: RequestHandler = (req, res, next) => {
+  res.cookie("jwt", "loggedOut", {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  resJson(res, "Logout success", null, 200);
+};
+
 export const protect: RequestHandler = async (req, res, next) => {
   try {
     let token;
