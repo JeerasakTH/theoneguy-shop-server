@@ -18,6 +18,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const constants_1 = require("./constants");
 const itemRoute_1 = __importDefault(require("./routes/itemRoute"));
 const userRoute_1 = __importDefault(require("./routes/userRoute"));
+const geoRoute_1 = __importDefault(require("./routes/geoRoute"));
 const errorHandler_1 = require("./utils/errorHandler");
 const cors_1 = __importDefault(require("cors"));
 const resJson_1 = require("./utils/resJson");
@@ -43,6 +44,7 @@ app.get("/", (_req, res) => {
 });
 app.use("/api/items", itemRoute_1.default);
 app.use("/api/users", userRoute_1.default);
+app.use("/api/geo", geoRoute_1.default);
 app.all("*", (req, res, next) => {
     return (0, resJson_1.resJson)(res, `Can't find ${req.originalUrl} on this server!`, null, 404);
 });

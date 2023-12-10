@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { DB, PORT } from "./constants";
 import itemRoutes from "./routes/itemRoute";
 import userRoutes from "./routes/userRoute";
+import geoRoutes from "./routes/geoRoute";
 import { errorHandler } from "./utils/errorHandler";
 import cors from "cors";
 import { resJson } from "./utils/resJson";
@@ -34,6 +35,7 @@ app.get("/", (_req: Request, res: Response) => {
 
 app.use("/api/items", itemRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/geo", geoRoutes)
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   return resJson(
